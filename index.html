@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Receipt Example</title>
+    <style>
+        * {
+            font-size: 12px;
+            font-family: 'Times New Roman', serif;
+        }
+
+        .ticket {
+            width: 200px;
+            max-width: 200px;
+            padding: 10px;
+            text-align: left;
+        }
+
+        .ticket img {
+            display: block;
+            margin: 0 auto 10px;
+            max-width: 100%;
+        }
+
+        .ticket p {
+            margin: 5px 0;
+            padding: 0;
+        }
+
+        .centered {
+            text-align: center;
+            margin-bottom: 20px; /* Add space below "BATCH REPORT" */
+        }
+
+        .spaced {
+            margin-top: 10px; /* Add space above "BATCH NO" */
+        }
+
+        input[type="text"], input[type="date"], input[type="time"] {
+            font-family: 'Times New Roman', serif;
+            font-size: 12px;
+            width: auto;
+            padding: 2px;
+            display: inline;
+            margin: 0;
+        }
+
+        input[type="text"] {
+            border: none; /* No border for text input */
+            border-bottom: 1px solid #000; /* Bottom border for text input */
+        }
+
+        input[type="text"]:focus {
+            outline: none; /* Remove focus outline for text input */
+        }
+
+        input[type="date"], input[type="time"] {
+            border: none; /* Remove border */
+            outline: none; /* Remove outline */
+            background: none; /* Remove background if necessary */
+        }
+
+        .editable {
+            border: 1px solid #ddd;
+            padding: 2px;
+            display: inline;
+            width: auto;
+        }
+
+        @media print {
+            .hidden-print,
+            .hidden-print * {
+                display: none !important;
+            }
+
+            input[type="text"], input[type="date"], input[type="time"] {
+                border: none; /* Ensure no border for printing */
+                outline: none; /* Ensure no outline for printing */
+                background: none; /* Ensure no background for printing */
+            }
+
+            .editable {
+                border: none; /* Ensure no border for printing */
+                padding: 2px; /* Maintain padding */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="ticket">
+        <img src="./1234.png" alt="Logo">
+        <p class="lift" contenteditable="true">BATCH REPORT</p>
+        <div>
+            <p contenteditable="true">.</p>
+        </div>
+        <p class="spaced">BATCH NO: <span class="editable" contenteditable="true">2009</span></p>
+        <p>MACH ID: <span class="editable" contenteditable="true">00000</span></p>
+        <p>TIME: <input type="time" id="time" name="time" /></p>
+        <p>DATE: <input type="date" id="date" name="date" /></p>
+        <p>AGGT10mm: <span class="editable" contenteditable="true">1205 Kgs</span></p>
+        <p>AGGT20mm: <span class="editable" contenteditable="true">1165 Kgs</span></p>
+        <p>AGGT30mm: <span class="editable" contenteditable="true">0000 Kgs</span></p>
+        <p>CEMT01: <span class="editable" contenteditable="true">0685 Kgs</span></p>
+        <p>CEMT02: <span class="editable" contenteditable="true">0000 Kgs</span></p>
+        <p>SAND01: <span class="editable" contenteditable="true">0000 Kgs</span></p>
+        <p>SAND02: <span class="editable" contenteditable="true">2025 Kgs</span></p>
+        <p>WATER: <span class="editable" contenteditable="true">0423 Ltrs</span></p>
+        <p>ADDITIVE: <span class="editable" contenteditable="true">00.00 Ltrs</span></p>
+        <p>TOTAL WT: <span class="editable" contenteditable="true">005503.00 Kgs</span></p>
+        <p>CuM: <span class="editable" contenteditable="true">000002.29</span></p>
+        <button id="btnPrint" class="hidden-print" onclick="window.print()">Print</button>
+    </div>
+
+    <script>
+        // Set default date and time
+        window.onload = function() {
+            var now = new Date();
+            var date = now.toISOString().substring(0, 10);
+            var time = now.toTimeString().substring(0, 5);
+            document.getElementById('date').value = date;
+            document.getElementById('time').value = time;
+        };
+    </script>
+</body>
+</html>
