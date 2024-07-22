@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>ajax bill</title>
+    <style>
+        * {
+            font-size: 12px;
+            font-family: 'Courier New', Courier, monospace;
+            color: #000; /* Dark color */
+        }
+
+        .ticket {
+            width: 200px;
+            max-width: 200px;
+            padding: 10px;
+            text-align: left;
+            margin: 0;
+            position: relative;
+        }
+
+        .ticket img {
+            display: block;
+            margin: 0; /* Align logo to the left */
+            max-width: 60%; /* Adjusted size */
+            height: auto; /* Maintain aspect ratio */
+        }
+
+        .ticket p {
+            margin: 15px 0;
+            padding: 0;
+        }
+
+        .centered {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .flex-row {
+            display: flex;
+            justify-content: space-between;
+            margin: 0;
+        }
+
+        .flex-row > *:first-child {
+            flex: 1;
+            text-align: left;
+        }
+
+        .flex-row > *:nth-child(2) {
+            flex: 0 0 auto;
+            text-align: center;
+            margin-right: 5px;
+        }
+
+        .flex-row > *:last-child {
+            flex: 2;
+            text-align: left;
+        }
+
+        .editable {
+            border: 1px solid #ddd;
+            padding: 2px;
+            display: inline-block;
+            width: auto;
+        }
+
+        .type-box {
+            border: 1px solid #000; /* Dark color */
+            padding: 5px;
+            margin-top: 10px;
+            min-height: 50px; /* Adjust height as needed */
+        }
+
+        @media print {
+            .hidden-print,
+            .hidden-print * {
+                display: none !important;
+            }
+
+            .editable {
+                border: none;
+                padding: 2px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="ticket">
+        <img src="/6263.png" width="500px"alt="Logo">
+         <p class="left" contenteditable="true">BATCH REPORT</p>
+        <div class="flex-row">
+            <span>BATCH NO</span>
+            <span>:</span>
+            <span class="editable" id="batch-no" contenteditable="true">5067</span>
+        </div>
+        <div class="flex-row">
+            <span>MACH ID</span>
+            <span>:</span>
+            <span class="editable" contenteditable="true">08199</span>
+        </div>
+        <div class="flex-row">
+            <span>TIME</span>
+            <span>:</span>
+            <span><span class="editable" id="time" contenteditable="true">01:39 PM</span></span>
+        </div>
+        <div class="flex-row">
+            <span>DATE</span>
+            <span>:</span>
+            <span><span class="editable" id="date" contenteditable="true">05-09-23</span></span>
+        </div>
+        <div class="flex-row">
+            <span>AGGT10mm</span>
+            <span>:</span>
+            <span><span class="editable" contenteditable="true">1700</span> Kgs</span>
+        </div>
+        <div class="flex-row">
+            <span>AGGT20mm</span>
+            <span>:</span>
+            <span><span class="editable" contenteditable="true">2645</span> Kgs</span>
+        </div>
+        <div class="flex-row">
+            <span>AGGT30mm</span>
+            <span>:</span>
+            <span><span class="editable" contenteditable="true">0000</span> Kgs</span>
+        </div>
+        <div class="flex-row">
+            <span>CEMT01</span>
+            <span>:</span>
+            <span><span class="editable" contenteditable="true">1230</span> Kgs</span>
+        </div>
+        <div class="flex-row">
+            <span>CEMT02</span>
+            <span>:</span>
+            <span><span class="editable" contenteditable="true">0000</span> Kgs</span>
+        </div>
+        <div class="flex-row">
+            <span>SAND01</span>
+            <span>:</span>
+            <span><span class="editable" contenteditable="true">2535</span> Kgs</span>
+        </div>
+        <div class="flex-row">
+            <span>SAND02</span>
+            <span>:</span>
+            <span><span class="editable" contenteditable="true">0000</span> Kgs</span>
+        </div>
+        <div class="flex-row">
+            <span>WATER</span>
+            <span>:</span>
+            <span><span class="editable" contenteditable="true">0550</span> Ltrs</span>
+        </div>
+        <div class="flex-row">
+            <span>ADDITIVE</span>
+            <span>:</span>
+            <span><span class="editable" contenteditable="true">00.00</span> Ltrs</span>
+        </div>
+        <div class="flex-row">
+            <span>TOTAL WT</span>
+            <span>:</span>
+            <span><span class="editable" contenteditable="true">008660.00</span> Kgs</span>
+        </div>
+        <div class="flex-row">
+            <span>CuM</span>
+            <span>:</span>
+            <span class="editable" contenteditable="true">000003.60</span>
+        </div>
+
+
+        <button id="btnPrint" class="hidden-print" onclick="window.print()">Print</button>
+    </div>
+
+    <script>
+        window.onload = function() {
+            var now = new Date();
+            var date = now.toISOString().split('T')[0].split('-');
+            var year = date[0].slice(-2); // Get last two digits of the year
+            var formattedDate = `${date[2]}-${date[1]}-${year}`; // Format the date as DD-MM-YY
+
+            var hours = now.getHours();
+            var minutes = now.getMinutes();
+            var ampm = hours >= 12 ? 'PM' : 'AM';
+            hours = hours % 12;
+            hours = hours ? hours : 12; // the hour '0' should be '12'
+            minutes = minutes < 10 ? '0'+minutes : minutes;
+            var time = hours + ':' + minutes + ' ' + ampm;
+
+            document.getElementById('date').innerText = formattedDate;
+            document.getElementById('time').innerText = time;
+        };
+    </script>
+</body>
+</html>
